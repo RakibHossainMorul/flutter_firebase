@@ -4,7 +4,9 @@ import 'package:flutter_firebase/ui/auth/sign_up.dart';
 
 import '../../utils/utils.dart';
 import '../../widgets/rounded_button.dart';
-import '../post_screen.dart';
+import '../Posts/post_screen.dart';
+import 'forget_password.dart';
+import 'login_with_phone.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -107,6 +109,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
               ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  const ForgotPasswordScreen()));
+                    },
+                    child: const Text(
+                      "Forgot Password",
+                      style: TextStyle(color: Colors.blue),
+                    )),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -125,7 +142,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PhoneAuthScreen()));
+                  },
                   child: const Text(
                     "Sign in With Phone",
                     style: TextStyle(color: Colors.blue),

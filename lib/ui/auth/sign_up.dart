@@ -5,7 +5,7 @@ import 'package:flutter_firebase/ui/auth/login_screen.dart';
 import 'package:flutter_firebase/utils/utils.dart';
 
 import '../../widgets/rounded_button.dart';
-import '../post_screen.dart';
+import '../Posts/post_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -21,6 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formFieldKey = GlobalKey<FormState>();
 
   FirebaseAuth auth = FirebaseAuth.instance;
+
   void signup() {
     auth
         .createUserWithEmailAndPassword(
