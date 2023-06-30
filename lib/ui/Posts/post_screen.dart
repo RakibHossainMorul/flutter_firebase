@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/firestore/firestoe_list_screen.dart';
+import 'package:flutter_firebase/ui/firebase_calculator.dart';
 import '../../utils/utils.dart';
 import '../auth/login_screen.dart';
 import '../upload_screen.dart';
@@ -74,6 +75,14 @@ class _PostScreenState extends State<PostScreen> {
       appBar: AppBar(
         title: const Text('Post'),
         actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CalculatorScreen()));
+              },
+              icon: const Icon(Icons.calculate)),
           IconButton(
               onPressed: () {
                 Navigator.push(
