@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class CalculatorScreen extends StatefulWidget {
 
 class _CalculatorScreenState extends State<CalculatorScreen> {
   bool loading = false;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final realTimeDatabase = FirebaseDatabase.instance.ref('Calculator');
   final TextEditingController _controller1 = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
@@ -35,8 +37,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     _subResult = SubFunction(value1, value2);
     _mulResult = MulFunction(value1, value2);
     _divResult = DivFunction(value1, value2);
-
-    realTimeDatabase.child('calculation').set({
+    //Data Added by individual user
+    User? user = _auth.currentUser;
+    String userId = user!.uid;
+    realTimeDatabase.child(userId).set({
       'Add Result': _addResult,
       'Sub Result': _subResult,
       'Mul Result': _mulResult,
@@ -80,6 +84,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         padding: const EdgeInsets.all(25.0),
         child: Column(
           children: <Widget>[
+            Text(_auth.currentUser!.uid.toString()),
             TextFormField(
               controller: _controller1,
               decoration: const InputDecoration(
@@ -107,38 +112,42 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               defaultChild: const Center(child: CircularProgressIndicator()),
               itemBuilder: (BuildContext context, DataSnapshot snapshot,
                   Animation<double> animation, int index) {
-                return Column(
-                  children: [
-                    Row(
-                      children: [
-                        const Text('Add  = ', style: TextStyle(fontSize: 30)),
-                        Text(snapshot.child('Add Result').value.toString(),
-                            style: const TextStyle(fontSize: 30)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text('Sub = ', style: TextStyle(fontSize: 30)),
-                        Text(snapshot.child('Sub Result').value.toString(),
-                            style: const TextStyle(fontSize: 30)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text('Mul = ', style: TextStyle(fontSize: 30)),
-                        Text(snapshot.child('Mul Result').value.toString(),
-                            style: const TextStyle(fontSize: 30)),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const Text('Div = ', style: TextStyle(fontSize: 30)),
-                        Text(snapshot.child('Div Result').value.toString(),
-                            style: const TextStyle(fontSize: 30)),
-                      ],
-                    ),
-                  ],
-                );
+                if (_auth.currentUser!.uid == snapshot.key) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          const Text('Add  = ', style: TextStyle(fontSize: 30)),
+                          Text(snapshot.child('Add Result').value.toString(),
+                              style: const TextStyle(fontSize: 30))
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Text('Sub = ', style: TextStyle(fontSize: 30)),
+                          Text(snapshot.child('Sub Result').value.toString(),
+                              style: const TextStyle(fontSize: 30)),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Text('Mul = ', style: TextStyle(fontSize: 30)),
+                          Text(snapshot.child('Mul Result').value.toString(),
+                              style: const TextStyle(fontSize: 30)),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Text('Div = ', style: TextStyle(fontSize: 30)),
+                          Text(snapshot.child('Div Result').value.toString(),
+                              style: const TextStyle(fontSize: 30)),
+                        ],
+                      ),
+                    ],
+                  );
+                } else {
+                  return Center(child: Container());
+                }
               },
             )),
           ],
